@@ -1,6 +1,8 @@
 defmodule PlugSignature.SignatureString do
   @moduledoc false
 
+  require Logger
+
   def build(conn, signature_opts, algorithm, header_list) do
     signature_string =
       header_list
@@ -11,7 +13,9 @@ defmodule PlugSignature.SignatureString do
   rescue
     # Handle the case where (created) or (expires) pseudo header is not
     # available or not supported by the algorithm
-    _key_error -> {:error, "could not build signature_string"}
+    key_error -> 
+      Logger.error("Got error while building signature string: #{inspect(key_error)}")
+      {:error, "could not build signature_string"}
   end
 
   defp header_part(conn, _signature_opts, _algorithm, "(request-target)") do
