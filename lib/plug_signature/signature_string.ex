@@ -46,7 +46,7 @@ defmodule PlugSignature.SignatureString do
       |> Enum.filter(&match?({^header_name, _}, &1))
       |> Enum.map(&String.trim(elem(&1, 1)))
 
-    if values == [], do: raise("Missing header")
+    if values == [], do: raise("Missing header: #{inspect(header_name)}")
 
     "#{header_name}: #{Enum.join(values, ", ")}"
   end
